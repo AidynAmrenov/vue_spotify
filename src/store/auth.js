@@ -1,5 +1,5 @@
 // auth.js
-import {auth} from '../plugins/spotify'
+import spotify from '../plugins/spotify'
 import qs from 'qs'
 
 export default {
@@ -15,35 +15,34 @@ export default {
     mutations: {
         setToken(state, token) {
             state.token = token
+            spotify.defaults.headers.Authorization = `Bearer ${token}`
+            localStorage.setItem('spotify_token', JSON.stringify(token))
         },
         clearToken(state) {
             state.token = null
+            spotify.defaults.headers.Authorization = null
+            localStorage.removeItem('spotify_token')
         },
     },
     actions: {
-        login({commit}, credentials) {
+        init({ commit }) {
+            const token = localStorage.getItem('spotify_token')
 
-            const headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: 'Basic ' + btoa(credentials.username + ':' + credentials.password),
+            if (token) {
+                commit('setToken', JSON.parse(token))
             }
 
+        },
+        login() {
+            const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
+            const url = 'https://accounts.spotify.com/authorize'
             const query = qs.stringify({
-                grant_type: 'client_credentials',
+                response_type: 'code',
+                client_id: clientId,
+                redirect_uri: 'http://localhost:3000/callback'
             })
 
-            console.log(credentials, headers, query)
-
-            return auth.post('token', query, { headers })
-                .then(response => {
-                    console.log(response.data)
-                    commit('setToken', response.data.access_token)
-                    return true
-                })
-                .catch(error => {
-                    console.error(error)
-                    return false
-                })
+            window.location = `${url}?${query}`
         }
     },
 }
