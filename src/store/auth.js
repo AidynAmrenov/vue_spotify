@@ -1,5 +1,6 @@
 // auth.js
 import {auth} from '../plugins/spotify'
+import qs from 'qs'
 
 export default {
     namespaced: true,
@@ -27,10 +28,15 @@ export default {
                 Authorization: 'Basic ' + btoa(credentials.username + ':' + credentials.password),
             }
 
-            return auth.post('token', {
+            const query = qs.stringify({
                 grant_type: 'client_credentials',
-            }, {headers})
+            })
+
+            console.log(credentials, headers, query)
+
+            return auth.post('token', query, { headers })
                 .then(response => {
+                    console.log(response.data)
                     commit('setToken', response.data.access_token)
                     return true
                 })
