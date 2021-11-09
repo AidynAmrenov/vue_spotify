@@ -6,28 +6,23 @@ const source = axios.CancelToken.source()
 
 export default {
   data: () => ({
-    value: '',
-    results: null,
-    loading: false,
+    value: ''
   }),
-  watch: {
-    // value() {
-    //
-    //   if (this.value.length > 0) {
-    //     this.search()
-    //   } else {
-    //     this.results = null
-    //     this.loading = false
-    //   }
-    //
-    // }
-  },
   methods: {
     resultsToSuggestions(results) {
       return results.map(result => {
-        return {
-          value: result.name,
+        result.value = result.name
+
+        if (result.type === 'artist') {
+          result.value = 'Исполнитель: ' + result.value
+          result.icon = 'mdi-account-multiple'
         }
+        else if (result.type === 'track') {
+          result.value = 'Трек: ' + result.value + ' - ' + result.artists[0].name
+          result.icon = 'mdi-music'
+        }
+
+        return result
       })
     },
     search(value, callback) {
@@ -38,6 +33,7 @@ export default {
         params: {
           q: value,
           type: 'artist,track',
+          limit: 5,
         }
       }).then(response => {
         this.results = response.data
@@ -45,19 +41,13 @@ export default {
         let tracks = []
 
         if ('tracks' in response.data) {
-          tracks = response.data.tracks.items.map(t => {
-            t.name = 'Трек: ' + t.name + ' - ' + t.artists[0].name
-            return t
-          })
+          tracks = response.data.tracks.items
         }
 
         let artists = []
 
         if ('artists' in response.data) {
-          artists = response.data.artists.items.map(a => {
-            a.name = 'Исполнитель: ' + a.name
-            return a
-          })
+          artists = response.data.artists.items
         }
 
         const suggestions = this.resultsToSuggestions(tracks.concat(artists))
@@ -67,6 +57,10 @@ export default {
         this.loading = false
       })
 
+    },
+    handleSelect(item) {
+      this.value = ''
+      console.log(item)
     }
   }
 }
@@ -78,11 +72,11 @@ export default {
     <el-autocomplete
         clearable
         v-model="value"
+        @select="handleSelect"
         :trigger-on-focus="false"
         :fetch-suggestions="search"
         placeholder="Трек или испольнитель..."
     />
 
-    {{ results }}
   </div>
 </template>
