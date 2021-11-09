@@ -37,7 +37,7 @@ export default {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
             const url = 'https://accounts.spotify.com/authorize'
             const query = qs.stringify({
-                response_type: 'code',
+                response_type: 'token',
                 client_id: clientId,
                 redirect_uri: 'http://localhost:3000/callback'
             })
