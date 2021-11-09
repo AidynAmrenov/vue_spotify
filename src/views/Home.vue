@@ -42,6 +42,10 @@ export default {
 
 <template>
 
+  <el-button>
+    Hello
+  </el-button>
+
   <form @submit.prevent="search">
     <input type="text" v-model="searchInput">
     <button>Поиск</button>

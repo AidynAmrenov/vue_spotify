@@ -1,5 +1,10 @@
 <script>
+import TopBarSearch from './components/TopBarSearch.vue'
+
 export default {
+  components: {
+    TopBarSearch,
+  },
   data: () => ({
     loading: false,
   }),
@@ -23,5 +28,20 @@ export default {
 </script>
 
 <template>
-  <router-view v-if="!loading" :key="$route.fullPath" />
+  <div v-if="!loading">
+
+    <div class="el-menu el-menu--horizontal" style="padding: 10px">
+      <top-bar-search />
+    </div>
+
+    <router-view :key="$route.fullPath" />
+
+  </div>
 </template>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+</style>
