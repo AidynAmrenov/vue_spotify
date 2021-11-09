@@ -14,12 +14,11 @@ export default {
         result.value = result.name
 
         if (result.type === 'artist') {
-          result.value = 'Исполнитель: ' + result.value
-          result.icon = 'mdi-account-multiple'
+          result.icon = 'people'
         }
         else if (result.type === 'track') {
-          result.value = 'Трек: ' + result.value + ' - ' + result.artists[0].name
-          result.icon = 'mdi-music'
+          result.value = result.value + ' - ' + result.artists[0].name
+          result.icon = 'audiotrack'
         }
 
         return result
@@ -76,7 +75,16 @@ export default {
         :trigger-on-focus="false"
         :fetch-suggestions="search"
         placeholder="Трек или испольнитель..."
-    />
+    >
+      <template #default="{item}">
+        <div class="value">
+          <i class="material-icons" style="color: #e0e0e0; padding-top: 7px; margin-right: 10px; font-size: 14px">
+            {{ item.icon }}
+          </i>
+          {{ item.value }}
+        </div>
+      </template>
+    </el-autocomplete>
 
   </div>
 </template>
