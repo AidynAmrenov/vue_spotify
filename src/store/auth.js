@@ -2,7 +2,7 @@
 import spotify from '../plugins/spotify'
 import qs from 'qs'
 import { encode } from 'js-base64'
-import axios from "axios";
+import axios from 'axios'
 
 export default {
     namespaced: true,
@@ -133,7 +133,8 @@ export default {
             const query = qs.stringify({
                 response_type: 'token',
                 client_id: clientId,
-                redirect_uri: 'http://localhost:3000/callback'
+                redirect_uri: 'http://localhost:3000/callback',
+                scope: 'user-top-read',
             })
 
             window.location = `${url}?${query}`
