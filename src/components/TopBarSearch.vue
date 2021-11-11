@@ -61,6 +61,7 @@ export default {
       this.value = ''
       console.log(item)
     }
+
   }
 }
 

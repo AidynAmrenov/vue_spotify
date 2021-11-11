@@ -30,7 +30,7 @@ export default {
 <template>
   <div v-if="!loading">
 
-    <div class="el-menu el-menu--horizontal" style="padding: 10px">
+    <div v-if="$store.getters['auth/check']" class="el-menu el-menu--horizontal" style="padding: 10px">
       <top-bar-search />
     </div>
 

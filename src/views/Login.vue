@@ -11,8 +11,12 @@ export default {
 
 <template>
 
-  <button @click="submit">
-    Login via Spotify
-  </button>
+    <div style="display: flex; justify-content: center; padding: 15px">
+
+      <el-button @click="submit">
+        Login via Spotify
+      </el-button>
+
+    </div>
 
 </template>
